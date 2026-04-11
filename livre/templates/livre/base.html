@@ -66,17 +66,17 @@
             <ul class="navbar-nav">
                 {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <span class="nav-link text-light">Connecte: {{ user.username }}</span>
+                    <span class="nav-link text-dark fw-semibold">Connecte: {{ user.username }}</span>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-warning fw-semibold" href="{% url 'logout' %}">Deconnexion</a>
+                    <a class="nav-link text-dark fw-semibold" href="{% url 'logout' %}">Deconnexion</a>
                 </li>
                 {% else %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Connexion</a>
+                    <a class="nav-link text-dark fw-semibold" href="{% url 'login' %}">Connexion</a>
                 </li>
                 <li class="nav-item">
-                    <a class="btn btn-outline-light btn-sm ms-2 nav-link" href="{% url 'register' %}">S'inscrire</a>
+                    <a class="nav-link text-dark fw-semibold" href="{% url 'register' %}">S'inscrire</a>
                 </li>
                 {% endif %}
             </ul>
