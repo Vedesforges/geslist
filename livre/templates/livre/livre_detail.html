@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ livre.titre }} — BiblioApp{% endblock %}
+
+{% block content %}
+
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'livre_liste' %}" class="text-decoration-none">
+                <i class="bi bi-house me-1"></i>Catalogue
+            </a>
+        </li>
+        <li class="breadcrumb-item active">{{ livre.titre|truncatechars:40 }}</li>
+    </ol>
+</nav>
+
+<div class="row g-4">
+    <!-- Détails du livre -->
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center py-3"
+                 style="background: linear-gradient(135deg, #2c3e50, #34495e);">
+                <div>
+                    <span class="badge bg-light text-dark genre-badge me-2">
+                        <i class="bi bi-bookmark me-1"></i>{{ livre.get_genre_display }}
+                    </span>
+                </div>
+                <span class="badge {% if livre.disponible %}bg-success{% else %}bg-danger{% endif %} genre-badge">
+                    <i class="bi bi-{% if livre.disponible %}check-circle{% else %}x-circle{% endif %} me-1"></i>
+                    {% if livre.disponible %}Disponible{% else %}Indisponible{% endif %}
+                </span>
+            </div>
+
+            <div class="card-body p-4">
+                <h2 class="fw-bold mb-1">{{ livre.titre }}</h2>
+                <p class="text-muted fs-5 mb-4">
+                    <i class="bi bi-person-fill me-2 text-primary"></i>{{ livre.auteur }}
+                </p>
+
+                <hr>
+
+                <h6 class="fw-bold text-uppercase text-muted small mb-2">Description</h6>
+                <p class="lead text-secondary">{{ livre.description }}</p>
+
+                <hr>
+
+                <div class="row text-center g-3 mt-1">
+                    <div class="col-4">
+                        <div class="p-3 bg-light rounded-3">
+                            <div class="fs-3 fw-bold text-primary">{{ livre.quantite }}</div>
+                            <div class="small text-muted">Exemplaires</div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="p-3 bg-light rounded-3">
+                            <div class="fs-5 fw-bold text-secondary">{{ livre.get_genre_display }}</div>
+                            <div class="small text-muted">Genre</div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="p-3 bg-light rounded-3">
+                            <div class="fs-5 fw-bold {% if livre.disponible %}text-success{% else %}text-danger{% endif %}">
+                                {% if livre.disponible %}Oui{% else %}Non{% endif %}
+                            </div>
+                            <div class="small text-muted">Disponible</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panneau latéral -->
+    <div class="col-lg-4">
+        <!-- Infos propriétaire -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6 class="card-title fw-bold mb-3">
+                    <i class="bi bi-info-circle me-2 text-primary"></i>Informations
+                </h6>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2 d-flex align-items-center">
+                        <i class="bi bi-person-circle me-2 text-muted"></i>
+                        <span>Ajouté par <strong>{{ livre.proprietaire.username }}</strong></span>
+                    </li>
+                    <li class="d-flex align-items-center">
+                        <i class="bi bi-calendar me-2 text-muted"></i>
+                        <span>{{ livre.date_ajout|date:"d/m/Y à H:i" }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-title fw-bold mb-3">
+                    <i class="bi bi-gear me-2 text-primary"></i>Actions
+                </h6>
+
+                <div class="d-grid gap-2">
+                    <a href="{% url 'livre_liste' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Retour au catalogue
+                    </a>
+
+                    {% if est_proprietaire %}
+                    <a href="{% url 'livre_modifier' livre.pk %}" class="btn btn-warning">
+                        <i class="bi bi-pencil-square me-2"></i>Modifier ce livre
+                    </a>
+                    <a href="{% url 'livre_supprimer' livre.pk %}" class="btn btn-danger">
+                        <i class="bi bi-trash3 me-2"></i>Supprimer ce livre
+                    </a>
+                    {% elif not user.is_authenticated %}
+                    <div class="alert alert-info mb-0 small">
+                        <i class="bi bi-lock me-2"></i>
+                        <a href="{% url 'connexion' %}">Connectez-vous</a> pour gérer vos livres.
+                    </div>
+                    {% else %}
+                    <div class="alert alert-secondary mb-0 small">
+                        <i class="bi bi-shield-lock me-2"></i>
+                        Seul le propriétaire peut modifier ce livre.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

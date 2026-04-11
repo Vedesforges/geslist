@@ -1,0 +1,55 @@
+{% extends "livre/base.html" %}
+
+{% block title %}Liste des livres{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <h1 class="mb-1">Liste des livres</h1>
+        <p class="text-muted mb-0">Consultez, modifiez et supprimez les livres de la bibliotheque.</p>
+    </div>
+    <a href="{% url 'ajouter_livre' %}" class="btn btn-primary">Ajouter un livre</a>
+</div>
+
+<form method="get" class="row g-2 mb-4">
+    <div class="col-md-8">
+        <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Rechercher par titre">
+    </div>
+    <div class="col-md-4 d-grid">
+        <button type="submit" class="btn btn-outline-primary">Rechercher</button>
+    </div>
+</form>
+
+{% if livres %}
+    <div class="row g-3">
+        {% for livre in livres %}
+            <div class="col-md-6 col-xl-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="card-title mb-0">{{ livre.titre }}</h5>
+                            <span class="badge {% if livre.disponible %}text-bg-success{% else %}text-bg-secondary{% endif %}">
+                                {% if livre.disponible %}Disponible{% else %}Indisponible{% endif %}
+                            </span>
+                        </div>
+                        <p class="mb-1"><strong>Auteur :</strong> {{ livre.auteur }}</p>
+                        <p class="mb-1"><strong>Genre :</strong> {{ livre.genre }}</p>
+                        <p class="mb-1"><strong>Quantite :</strong> {{ livre.quantite }}</p>
+                        <p class="mb-3"><strong>Proprietaire :</strong> {{ livre.proprietaire }}</p>
+                        {% if utilisateur_est_admin or user.username == livre.proprietaire %}
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'modifier_livre' livre.id %}" class="btn btn-sm btn-outline-warning">Modifier</a>
+                                <a href="{% url 'supprimer_livre' livre.id %}" class="btn btn-sm btn-outline-danger">Supprimer</a>
+                            </div>
+                        {% else %}
+                            <div class="small text-muted">Seul le proprietaire peut modifier ou supprimer ce livre.</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info mb-0">Aucun livre disponible.</div>
+{% endif %}
+{% endblock %}

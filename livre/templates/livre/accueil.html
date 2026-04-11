@@ -1,0 +1,28 @@
+{% extends "livre/base.html" %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body p-5 text-center">
+                <h1 class="display-5 mb-3">Bienvenue sur BiblioApp</h1>
+                <p class="lead text-muted mb-4">
+                    Gere tes livres, cree un compte et connecte-toi pour ajouter, modifier ou supprimer uniquement tes propres elements.
+                </p>
+
+                {% if user.is_authenticated %}
+                    <p class="mb-4">Vous etes connecte en tant que <strong>{{ user.username }}</strong>.</p>
+                    <a href="{% url 'livre_liste' %}" class="btn btn-primary btn-lg">Acceder au catalogue</a>
+                {% else %}
+                    <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+                        <a href="{% url 'login' %}" class="btn btn-primary btn-lg">Connexion</a>
+                        <a href="{% url 'register' %}" class="btn btn-outline-primary btn-lg">Inscription</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

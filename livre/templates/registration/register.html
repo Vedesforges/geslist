@@ -1,0 +1,23 @@
+{% extends "livre/base.html" %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card">
+            <div class="card-body p-4">
+                <h1 class="h3 mb-4">Inscription</h1>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary w-100">S'inscrire</button>
+                </form>
+                <p class="text-center mt-3 mb-0">
+                    Deja inscrit ? <a href="{% url 'login' %}">Connectez-vous</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

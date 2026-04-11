@@ -1,0 +1,56 @@
+{% extends "livre/base.html" %}
+
+{% block title %}
+    {% if mode == "modification" %}Modifier un livre{% else %}Ajouter un livre{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-body p-4">
+                <h1 class="h3 mb-4">
+                    {% if mode == "modification" %}Modifier le livre{% else %}Ajouter un livre{% endif %}
+                </h1>
+
+                <form method="post" novalidate>
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <label for="{{ form.titre.id_for_label }}" class="form-label">Titre</label>
+                        {{ form.titre }}
+                        <div class="text-danger small">{{ form.titre.errors }}</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.auteur.id_for_label }}" class="form-label">Auteur</label>
+                        {{ form.auteur }}
+                        <div class="text-danger small">{{ form.auteur.errors }}</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.genre.id_for_label }}" class="form-label">Genre</label>
+                        {{ form.genre }}
+                        <div class="text-danger small">{{ form.genre.errors }}</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="{{ form.quantite.id_for_label }}" class="form-label">Quantite</label>
+                        {{ form.quantite }}
+                        <div class="text-danger small">{{ form.quantite.errors }}</div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        <a href="{% url 'livre_liste' %}" class="btn btn-outline-secondary">Annuler</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
